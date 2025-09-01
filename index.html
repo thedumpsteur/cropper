@@ -302,6 +302,9 @@ hndl.addEventListener('touchend', stopResize);
 
 function doResize(moveEvent) {
 
+imgx = 0;
+imgy = 0;
+  
 const currentX = moveEvent.touches[0].clientX;
 const currentY = moveEvent.touches[0].clientY;
 
