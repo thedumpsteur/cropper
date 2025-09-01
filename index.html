@@ -221,6 +221,8 @@ img.onload = function() {
 //imageCanvas.width = img.width;
 //imageCanvas.height = img.height;
 // Draw the image on the canvas
+document.body.style.width = img.width+"px";
+document.body.style.height = img.height+"px";
 ctx.drawImage(img, 0, 0);
 };
 img.src = event.target.result; // Data URL
