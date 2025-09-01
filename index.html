@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+
+<style>
+#canvas-wrapper {
+//resize: both; /* Allows resizing horizontally and vertically */
+overflow: auto; /* Hides content that overflows during resize */
+min-width: 100px;
+min-height: 100px;
+background:green;
+}
+#imageCanvas {
+overflow: auto;
+background:green;
+//width: 200px;
+//height: 200px;
+}
+#wrapper {
+//resize: both; 
+overflow: auto;
+background:lightgreen;
+//width: 200px;
+//height: 200px;
+position: relative;
+}
+
+.resize-handle {
+position: absolute;
+bottom: 0;
+right: 0;
+width: 25px;
+height: 25px;
+background-color: #007bff; /* Custom color */
+cursor: se-resize; /* Standard resize cursor */
+border-top-left-radius: 5px; /* Example styling */
+}
+</style>
+
+</head>
+<body>
+<input type="file" id="imageInput"><br><a id="downloadButton" href="" download="croppedimg.png" onclick="dl(this);">Download cropped image</a>
+<div id="wrapper" class="resizable-box"><div id="handle" class="resize-handle"></div><canvas id="imageCanvas"></canvas></div>
+
+
+<script>
+
+// WIP
+
+
+// 2 move events
+
+/*
+let startX = 0;
+let startY = 0;
+
+var imgx = 0;
+var imgy = 0;
+
+const fileInput = document.getElementById('fileInput');
+
+fileInput.addEventListener('change', (event) => {
+const selectedFiles = event.target.files; // This is a FileList object
+
+if (selectedFiles.length > 0) {
+// You can iterate through the selectedFiles to process each file
+for (const file of selectedFiles) {
+console.log('File Name: ${file.name}');
+console.log('File Size: ${file.size} bytes');
+console.log('File Type: ${file.type}');
+
+// To read the content of a file (e.g., text file)
+const reader = new FileReader();
+reader.onload = (e) => {
+const fileContent = e.target.result;
+console.log('File Content: ${fileContent}');
+};
+reader.readAsText(file); // Or reader.readAsDataURL(file) for image previews, etc.
+
+
+const canvas = document.getElementById('mycanvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+
+img.onload = () => {
+canvas.width = img.width;
+canvas.height = img.height;
+ctx.drawImage(img, 0, 0); // Draw the image onto the canvas
+
+const element = document.getElementById('mycanvas');
+
+document.addEventListener('touchstart', (e) => {
+startX = e.touches[0].clientX;
+startY = e.touches[0].clientY;
+});
+
+element.addEventListener('touchmove', function(event) {
+// Prevent default browser scrolling/zooming behavior
+event.preventDefault();
+
+// Access touch point information
+const touch = event.touches[0]; // Get the first touch point
+
+// Get current touch coordinates relative to the viewport
+const clientX = touch.clientX;
+const clientY = touch.clientY;
+
+const currentX = e.touches[0].clientX;
+const currentY = e.touches[0].clientY;
+
+const deltaX = currentX - startX;
+const deltaY = currentY - startY;
+
+// Use deltaX and deltaY for your logic (e.g., dragging, scrolling)
+
+// Update startX and startY for the next touchmove event
+startX = currentX;
+startY = currentY;
+
+imgx += deltaX;
+imgy += deltaY;
+
+ctx.drawImage(img, imgx, imgy);
+
+// Perform actions based on touch movement (e.g., update element position)
+// console.log(`Touch moved to X: ${clientX}, Y: ${clientY}`);
+});
+
+
+};
+
+// Assuming 'dataURL' is obtained from FileReader
+//img.src = dataURL;
+img.src = reader.readAsDataURL(file);
+}
+} else {
+console.log('No file selected.');
+}
+});
+*/
+
+
+
+
+const imageCanvas = document.getElementById('imageCanvas');
+const ctx = imageCanvas.getContext('2d');
+const img = new Image();
+
+let startX = 0;
+let startY = 0;
+
+let resizestartX = 0;
+let resizestartY = 0;
+
+document.getElementById("wrapper").style.width = "200px";
+document.getElementById("wrapper").style.height = "200px";
+
+document.getElementById("imageCanvas").width = 200;  //entry.contentRect.width;
+document.getElementById("imageCanvas").height = 200;  
+
+var imgx = 0;
+var imgy = 0;
+
+document.addEventListener('touchstart', (e) => {
+startX = e.touches[0].clientX;
+startY = e.touches[0].clientY;
+});
+
+
+//element.addEventListener('touchmove', function(event) {
+imageCanvas.addEventListener('touchmove', (e) => {
+// Prevent default browser scrolling/zooming behavior
+//event.preventDefault();
+
+// Access touch point information
+//const touch = event.touches[0]; // Get the first touch point
+
+// Get current touch coordinates relative to the viewport
+//const clientX = touch.clientX;
+//const clientY = touch.clientY;
+
+const currentX = e.touches[0].clientX;
+const currentY = e.touches[0].clientY;
+
+const deltaX = currentX - startX;
+const deltaY = currentY - startY;
+
+// Use deltaX and deltaY for your logic (e.g., dragging, scrolling)
+
+// Update startX and startY for the next touchmove event
+startX = currentX;
+startY = currentY;
+
+imgx += deltaX;
+imgy += deltaY;
+
+ctx.drawImage(img, imgx, imgy);
+
+// Perform actions based on touch movement (e.g., update element position)
+// console.log('Touch moved to X: ${clientX}, Y: ${clientY}');
+});
+
+
+
+const imageInput = document.getElementById('imageInput');
+//const imageCanvas = document.getElementById('imageCanvas');
+//const ctx = imageCanvas.getContext('2d');
+
+imageInput.addEventListener('change', function(e) {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+
+reader.onload = function(event) {
+//const img = new Image();
+img.onload = function() {
+// Set canvas dimensions to match image
+//imageCanvas.width = img.width;
+//imageCanvas.height = img.height;
+// Draw the image on the canvas
+ctx.drawImage(img, 0, 0);
+};
+img.src = event.target.result; // Data URL
+};
+reader.readAsDataURL(file);
+}
+});
+
+
+
+const canvasWrapper = document.getElementById('wrapper');
+//const canvas = document.getElementById('imageCanvas');
+//const ctx2 = canvas.getContext('2d');
+
+const resizeObserver = new ResizeObserver(entries => {
+for (let entry of entries) {
+if (entry.target === canvasWrapper) {
+//console.log(imageCanvas.width);
+imageCanvas.width = canvasWrapper.offsetWidth;  //entry.contentRect.width;
+imageCanvas.height = canvasWrapper.offsetHeight;  //entry.contentRect.height;
+// Redraw canvas content after resizing, as resizing clears the canvas
+// Example: ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+}
+});
+
+//resizeObserver.observe(canvasWrapper);
+
+// Initial canvas size setup
+//imageCanvas.width = 100;
+//imageCanvas.height = 100;
+
+
+
+
+
+
+
+var hndl = document.getElementById("handle");
+
+
+const resizableBox = document.querySelector('.resizable-box');
+const resizeHandle = document.querySelector('.resize-handle');
+
+let isResizing = false;
+
+function startResize(e) {
+
+console.log("asdf");
+//alert("asdf");
+
+isResizing = true;
+// Prevent default touch behavior like scrolling
+if (e.type === 'touchstart') e.preventDefault(); 
+
+//const initialX = e.clientX || e.touches[0].clientX;
+//const initialY = e.clientY || e.touches[0].clientY;
+//const initialWidth = resizableBox.offsetWidth;
+//const initialHeight = resizableBox.offsetHeight;
+
+resizestartX = e.touches[0].clientX;
+resizestartY = e.touches[0].clientY;
+
+//hndl.addEventListener('mousemove', doResize);
+//hndl.addEventListener('mouseup', stopResize);
+hndl.addEventListener('touchmove', doResize);
+hndl.addEventListener('touchend', stopResize);
+}
+
+function doResize(moveEvent) {
+
+const currentX = moveEvent.touches[0].clientX;
+const currentY = moveEvent.touches[0].clientY;
+
+//alert("asdfg");
+console.log("asdf");
+
+const deltaX = currentX - resizestartX;
+const deltaY = currentY - resizestartY;
+
+//alert("asdfgh");
+
+// Use deltaX and deltaY for your logic (e.g., dragging, scrolling)
+
+// Update startX and startY for the next touchmove event
+resizestartX = currentX;
+resizestartY = currentY;
+
+const newWidth2 = Math.round( canvasWrapper.offsetWidth + deltaX );
+const newHeight2 = Math.round(  canvasWrapper.offsetHeight + deltaY );
+
+//csswdth = newWidth2;
+//csshght = newHeight2;
+canvasWrapper.style.width = newWidth2+"px";
+canvasWrapper.style.height = newHeight2+"px";
+
+console.log(newWidth2+"px");
+
+
+imageCanvas.width = canvasWrapper.offsetWidth;  //entry.contentRect.width;
+imageCanvas.height = canvasWrapper.offsetHeight;  
+
+
+//ctx.drawImage(img, imgx, imgy);
+
+
+//const currentX = moveEvent.clientX || moveEvent.touches[0].clientX;
+//const currentY = moveEvent.clientY || moveEvent.touches[0].clientY;
+
+//const newWidth = initialWidth + (currentX - initialX);
+//const newHeight = initialHeight + (currentY - initialY);
+
+//resizableBox.style.width = '${newWidth}px';
+//resizableBox.style.height = '${newHeight}px';
+
+//alert("asdf");
+
+}
+
+function stopResize() {
+isResizing = false;
+//hndl.removeEventListener('mousemove', doResize);
+//hndl.removeEventListener('mouseup', stopResize);
+hndl.removeEventListener('touchmove', doResize);
+hndl.removeEventListener('touchend', stopResize);
+}
+
+//hndl.addEventListener('mousedown', startResize);
+hndl.addEventListener('touchstart', startResize);
+
+
+
+
+
+function downloadCanvasAsImage(canvas, filename = 'canvas_image.png') {
+
+//alert("aassddff");
+
+const dataURL = document. getElementById("imageCanvas").toDataURL('image/png');
+const link = document.createElement('a');
+link.download = 'my_canvas_image.png';
+link.href = dataURL;
+
+//alert(link.href);
+
+canvasWrapper.appendChild(link);
+link.click();
+canvasWrapper.removeChild(link);
+
+}
+
+// Example usage:
+//const myCanvas = document.getElementById('myCanvas');
+// ... (draw something on myCanvas) ...
+
+
+
+
+function downloadCanvasAsImage2(canvasId, filename = 'canvas_image.png', mimeType = 'image/png') {
+const canvas = document.getElementById(canvasId);
+if (!canvas) {
+console.error('Canvas element not found.');
+return;
+}
+
+canvas.toBlob((blob) => {
+if (blob) {
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = filename;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+} else {
+console.error('Failed to create Blob from canvas.');
+}
+}, mimeType);
+}
+
+// Example usage:
+// Assuming you have a canvas with id="myCanvas"
+// downloadCanvasAsImage('myCanvas', 'my_drawing.jpeg', 'image/jpeg');
+
+
+function dl(el) {
+//downloadCanvasAsImage2('imageCanvas', 'my_drawing.png', 'image/png');
+var dlbtn = document.getElementById("downloadButton");
+var image = document. getElementById("imageCanvas").toDataURL('image/png');
+el.href = image;
+//alert("asdf");
+}
+
+//document.getElementById("downloadButton").addEventListener("touchstart", dl);
+
+</script>
+
+</body>
+</html>
