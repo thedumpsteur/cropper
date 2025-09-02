@@ -46,7 +46,7 @@ overscroll-behavior: none; /* Disables both horizontal and vertical overscroll b
 
 </head>
 <body>
-<input type="file" id="imageInput"><br><a id="downloadButton" href="" download="croppedimg.png" onclick="dl(this);">Download cropped image</a>
+<input type="file" id="imageInput"><br><a id="downloadButton" href="" download="croppedimg.jpg" onclick="dl(this);">Download cropped image</a>
 <div id="wrapper" class="resizable-box"><div id="handle" class="resize-handle"></div><canvas id="imageCanvas"></canvas></div>
 
 
@@ -423,7 +423,7 @@ console.error('Failed to create Blob from canvas.');
 function dl(el) {
 //downloadCanvasAsImage2('imageCanvas', 'my_drawing.png', 'image/png');
 var dlbtn = document.getElementById("downloadButton");
-var image = document. getElementById("imageCanvas").toDataURL('image/png');
+var image = document. getElementById("imageCanvas").toDataURL('image/jpeg');
 el.href = image;
 //alert("asdf");
 }
